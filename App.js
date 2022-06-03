@@ -1,27 +1,39 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React,{useState} from 'react';
 import Cep from './Componentes/Cep';
+import Api from './Componentes/Api';
 
 export default function App() {
+  const [cep, setCep] = useState("");
+  const [inputCep, setInputCep] = useState(0);
+
+  async function buscaCep(){
+    const response = await Api.get('ws/'+inputCep+'/json');
+    setCep(response.data);
+  }
   return (
     <View style={styles.container}>
       <View style={styles.bloco}>
       <Text>Digite seu CEP </Text>
-     
+      
+  
+
      <TextInput
        placehoulder='ex: 11740000'
        keyboardType='numeric'
        style={styles.input}
+       onChangeText={(data)=>setInputCep(data)}
      />
 
       <TouchableOpacity 
       style={styles.botao}
+      onPress={buscaCep}
       >
 
         <Text style={styles.txtBotao}>Buscar</Text>
       </TouchableOpacity>
 
-      <Cep />
+      <Cep  data={cep}/>
     </View>
     </View>
   );
